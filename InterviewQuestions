@@ -1,0 +1,105 @@
+🎯 Linux & Shell Scripting Interview Q&A (1-3 Years Exp | Practical Scenarios)
+1. Explain the Difference Between Hard Link and Soft Link.
+•	Answer:
+o	Hard Link: Points directly to the file’s inode. Deleting original file doesn’t break the hard link.
+o	Soft Link (Symlink): Points to the file path. If original is deleted, symlink becomes broken.
+________________________________________
+2. Scenario: Disk Usage Full on EC2 Instance — How Will You Debug?
+•	STAR Answer:
+o	Situation: EC2 instance reports “disk full” alert.
+o	Task: Free up disk space immediately.
+o	Action: Ran df -h to find mounted partition usage. Used du -sh * to identify large directories. Cleaned up old log files in /var/log, removed unnecessary temp files.
+o	Result: Freed up 10GB, brought disk usage down to safe threshold.
+________________________________________
+3. What is a Shebang (#!) in Shell Scripts?
+•	Answer: Shebang defines the interpreter for the script. Example: #!/bin/bash tells OS to use Bash shell to execute the script.
+________________________________________
+4. Scenario: A Cron Job Didn’t Execute — How Will You Debug?
+•	Answer:
+o	Checked cron syntax correctness using crontab -l.
+o	Verified script has executable permission (chmod +x).
+o	Inspected /var/log/cron or /var/log/syslog for cron logs.
+o	Ensured absolute paths used in script (cron runs in minimal environment).
+________________________________________
+5. Write a Script to Backup /var/www Directory to /backup Folder.
+•	Answer:
+bash
+CopyEdit
+#!/bin/bash
+tar -czvf /backup/www-backup-$(date +%F).tar.gz /var/www
+________________________________________
+6. Explain Pipe (|) and Redirect (>) in Linux.
+•	Answer:
+o	Pipe (|): Passes output of one command as input to another. Example: ps -ef | grep nginx.
+o	Redirect (>): Redirects output to file. Example: ls > filelist.txt.
+________________________________________
+7. Scenario: Permission Denied Error on Script Execution — How Will You Fix?
+•	Answer:
+o	Ensure script has execute permission: chmod +x script.sh.
+o	Verify current user has ownership/access rights (ls -l).
+o	Use sudo if elevated permissions required.
+________________________________________
+8. Write a Loop to Print Numbers from 1 to 10.
+•	Answer:
+bash
+CopyEdit
+for i in {1..10}
+do
+  echo "Number $i"
+done
+________________________________________
+9. Scenario: Application Logs Need to be Archived Daily — How Will You Automate?
+•	Answer:
+o	Wrote a shell script to compress log files and move to archive folder.
+o	Scheduled script using crontab -e to run at midnight daily.
+________________________________________
+10. What is the Difference Between ps -ef and top?
+•	Answer:
+o	ps -ef: One-time snapshot of all running processes.
+o	top: Real-time dynamic view of system processes & resource usage.
+________________________________________
+11. Scenario: How Will You Find Which Process is Using Port 8080?
+•	Answer:
+o	Ran sudo lsof -i :8080 or netstat -tulnp | grep 8080 to identify process.
+________________________________________
+12. What is the Use of ‘grep’ and ‘awk’ in Shell?
+•	Answer:
+o	grep: Searches for specific pattern in files.
+o	awk: Processes and extracts data from structured text (columns/fields).
+________________________________________
+13. Scenario: Need to Monitor CPU Usage Every 5 Minutes — How Will You Script This?
+•	Answer:
+o	Wrote a Bash script using top -b -n1 | grep "Cpu(s)" to capture CPU usage.
+o	Scheduled it in crontab every 5 mins to log output.
+________________________________________
+14. What is the Difference Between Relative and Absolute Paths in Linux?
+•	Answer:
+o	Relative Path: Starts from current directory (e.g., ./script.sh).
+o	Absolute Path: Full path from root (e.g., /home/user/script.sh).
+________________________________________
+15. Scenario: Shell Script Executes in Terminal but Fails in Jenkins — How Will You Debug?
+•	STAR Answer:
+o	Situation: Shell script works fine locally, fails in Jenkins pipeline.
+o	Task: Make it Jenkins compatible.
+o	Action: Checked environment variables in Jenkins (minimal shell). Updated script to use absolute paths. Ensured Jenkins user has necessary file permissions.
+o	Result: Script executed successfully in Jenkins after environment adjustments.
+________________________________________
+⚙️ Mini Shell Script Examples (Practice Tasks)
+1.	Script to Check if a Service is Running
+bash
+CopyEdit
+#!/bin/bash
+if systemctl is-active --quiet nginx
+then
+  echo "Nginx is running"
+else
+  echo "Nginx is not running"
+fi
+2.	Cron Job Example (Run Script at 2 AM Daily)
+bash
+CopyEdit
+0 2 * * * /home/user/backup.sh
+3.	One-liner to Find Files Modified in Last 1 Day
+bash
+CopyEdit
+find /var/log -type f -mtime -1
